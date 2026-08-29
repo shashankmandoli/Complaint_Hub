@@ -1,0 +1,128 @@
+.notifications-page {
+  padding: 30px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+.page-header p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.mark-read-btn {
+  height: 42px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #7c3aed;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.mark-read-btn:hover {
+  background: #f3edff;
+  border-color: #7c3aed;
+}
+
+.notifications-card {
+  background: white;
+  border-radius: 18px;
+  padding: 10px 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item.unread {
+  background: #faf5ff;
+  margin: 0 -25px;
+  padding: 18px 25px;
+}
+
+.notification-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: #f3edff;
+  color: #7c3aed;
+}
+
+.notification-item.alert .notification-icon {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.notification-item.success .notification-icon {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-content h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 4px;
+}
+
+.notification-content p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .notifications-page {
+    padding: 20px;
+  }
+  .page-header h1 {
+    font-size: 24px;
+  }
+  .notification-time {
+    display: none;
+  }
+}

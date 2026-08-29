@@ -1,0 +1,365 @@
+/* ==========================================================
+   ADMIN TOPBAR
+========================================================== */
+
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 24px;
+
+  margin-bottom: 24px;
+}
+
+/* ==========================================================
+   LEFT
+========================================================== */
+
+.topbar-left h1 {
+  margin: 0;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  color: #1f2937;
+}
+
+.topbar-left p {
+  margin-top: 6px;
+
+  font-size: 14px;
+
+  color: #6b7280;
+}
+
+/* ==========================================================
+   RIGHT
+========================================================== */
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  flex-wrap: wrap;
+}
+
+/* ==========================================================
+   SEARCH
+========================================================== */
+
+.search-box {
+  display: flex;
+  align-items: center;
+
+  width: 320px;
+  height: 44px;
+
+  padding: 0 14px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  transition: all 0.25s ease;
+}
+
+.search-box:focus-within {
+  border-color: #7c3aed;
+
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.08);
+}
+
+.search-icon {
+  color: #9ca3af;
+
+  font-size: 14px;
+
+  margin-right: 10px;
+}
+
+.search-box input {
+  flex: 1;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  font-size: 14px;
+
+  color: #374151;
+}
+
+.search-box input::placeholder {
+  color: #9ca3af;
+}
+
+/* ==========================================================
+   DATE
+========================================================== */
+
+.topbar-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 0 14px;
+
+  height: 44px;
+
+  background: #ffffff;
+
+  border: 1px solid #eceff5;
+
+  border-radius: 12px;
+
+  color: #6b7280;
+
+  font-size: 13px;
+
+  white-space: nowrap;
+}
+
+.topbar-date svg {
+  color: #7c3aed;
+}
+
+/* ==========================================================
+   NOTIFICATION
+========================================================== */
+
+.notification-btn {
+    color:inherit;
+  position: relative;
+
+  width: 44px;
+  height: 44px;
+
+  border: 1px solid #eceff5;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.notification-btn:hover {
+  background: #7c3aed;
+
+  color: white;
+
+  border-color: #7c3aed;
+}
+
+.notification-btn svg {
+  font-size: 16px;
+}
+
+.notification-badge {
+  position: absolute;
+
+  top: -5px;
+  right: -5px;
+
+  width: 18px;
+  height: 18px;
+
+  border-radius: 50%;
+
+  background: #ef4444;
+  color: white;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid white;
+}
+
+/* ==========================================================
+   PROFILE
+========================================================== */
+
+.admin-profile {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  height: 44px;
+
+  padding: 6px 10px;
+
+  border: 1px solid #eceff5;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.admin-profile:hover {
+  border-color: #7c3aed;
+
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.08);
+}
+
+.admin-profile img {
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+}
+
+.profile-info {
+  text-align: left;
+}
+
+.profile-info h4 {
+  margin: 0;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #1f2937;
+}
+
+.profile-info p {
+  margin-top: 2px;
+
+  font-size: 11px;
+
+  color: #9ca3af;
+}
+
+.profile-arrow {
+  font-size: 12px;
+
+  color: #9ca3af;
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width: 1200px) {
+
+  .topbar-date {
+    display: none;
+  }
+
+  .search-box {
+    width: 260px;
+  }
+
+}
+
+@media (max-width: 900px) {
+
+  .admin-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .topbar-right {
+    width: 100%;
+  }
+
+  .search-box {
+    flex: 1;
+    width: 100%;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .profile-info,
+  .profile-arrow {
+    display: none;
+  }
+
+  .admin-profile {
+    padding: 5px;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+}
+/* ==========================================================
+   PROFILE DROPDOWN
+========================================================== */
+
+.profile-wrapper {
+  position: relative;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+
+  background: white;
+  border: 1px solid #eceff5;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+
+  min-width: 160px;
+  padding: 6px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  z-index: 1500;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  border: none;
+  background: transparent;
+
+  padding: 10px 12px;
+  border-radius: 8px;
+
+  font-size: 13px;
+  color: #374151;
+
+  cursor: pointer;
+  text-align: left;
+}
+
+.dropdown-item:hover {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.dropdown-item.logout:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}

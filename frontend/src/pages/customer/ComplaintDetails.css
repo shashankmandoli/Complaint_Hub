@@ -1,0 +1,171 @@
+.details-page {
+  max-width: 700px;
+}
+
+.back-btn {
+  border: none;
+  background: transparent;
+  color: #7c3aed;
+  font-size: 13.5px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+.not-found {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.details-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.details-header h1 {
+  font-size: 22px;
+  color: #1f2937;
+  margin: 0 0 8px;
+}
+
+.details-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.details-meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Timeline */
+.timeline {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 32px;
+  padding: 0 6px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 24px;
+  right: 24px;
+  height: 2px;
+  background: #e5e7eb;
+  z-index: 0;
+}
+
+.timeline-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e5e7eb;
+}
+
+.timeline-step.done .timeline-dot {
+  background: #7c3aed;
+}
+
+.timeline-step p {
+  margin: 0;
+  font-size: 12.5px;
+  color: #9ca3af;
+}
+
+.timeline-step.done p {
+  color: #7c3aed;
+  font-weight: 600;
+}
+
+/* Sections */
+.details-section {
+  margin-bottom: 22px;
+}
+
+.details-section h4 {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.details-section p {
+  margin: 0;
+  font-size: 14.5px;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.agent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14.5px;
+  color: #334155;
+}
+
+.agent-row svg {
+  color: #7c3aed;
+}
+
+.status {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pending {
+  background: #fff4d9;
+  color: #c28a00;
+}
+
+.progress {
+  background: #dff4ff;
+  color: #0078d4;
+}
+
+.resolved {
+  background: #dff7e7;
+  color: #188038;
+}

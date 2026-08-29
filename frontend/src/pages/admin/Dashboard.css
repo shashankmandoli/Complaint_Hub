@@ -1,0 +1,298 @@
+/* ==========================================================
+   GLOBAL
+========================================================== */
+
+*,
+*::before,
+*::after{
+    box-sizing:border-box;
+}
+
+
+html,
+body,
+#root{
+
+    width:100%;
+
+    max-width:100%;
+
+    overflow-x:hidden;
+
+}
+
+
+body{
+
+    margin:0;
+
+    background:#f7f8fc;
+
+    font-family:"Poppins",sans-serif;
+
+}
+
+
+
+/* ==========================================================
+   MAIN WRAPPER
+========================================================== */
+
+
+.admin-dashboard{
+
+    display:flex;
+
+    min-height:100vh;
+
+    width:100%;
+
+    overflow:hidden;
+
+}
+
+
+
+/* ==========================================================
+   DASHBOARD AREA
+========================================================== */
+
+
+.admin-main{
+
+    margin-left:240px;
+
+    flex:1;
+
+    min-width:0;
+
+    min-height:100vh;
+
+    padding:20px;
+
+    background:#f7f8fc;
+
+    overflow-x:hidden;
+
+}
+
+
+
+/* ==========================================================
+   STATISTICS CARDS
+========================================================== */
+
+
+.stats-section{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,minmax(0,1fr));
+
+    gap:18px;
+
+    margin-bottom:22px;
+
+}
+
+
+
+/* ==========================================================
+   CONTENT WRAPPER
+========================================================== */
+
+
+.dashboard-layout{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+
+
+/* ==========================================================
+   DASHBOARD ROWS
+========================================================== */
+
+
+.dashboard-row{
+
+    display:grid;
+
+    gap:20px;
+
+    width:100%;
+
+    align-items:stretch;
+
+}
+
+
+
+.dashboard-row-large{
+
+    grid-template-columns:
+
+    minmax(0,2fr)
+
+    minmax(300px,1fr);
+
+}
+
+
+
+.dashboard-row-small{
+
+    grid-template-columns:
+
+    minmax(0,2fr)
+
+    minmax(300px,1fr);
+
+}
+
+
+
+/* ==========================================================
+   CARD WRAPPER
+========================================================== */
+
+
+.dashboard-card{
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    min-width:0;
+
+    overflow:hidden;
+
+}
+
+
+
+/* Keep components inside card */
+
+.dashboard-card > *{
+
+    width:100%;
+
+}
+
+
+
+/* ==========================================================
+   TABLE FIX
+========================================================== */
+
+
+.dashboard-card table{
+
+    width:100%;
+
+    max-width:100%;
+
+}
+
+
+
+/* ==========================================================
+   CHART FIX
+========================================================== */
+
+
+.dashboard-card svg{
+
+    max-width:100%;
+
+}
+
+
+
+/* ==========================================================
+   LAPTOP
+========================================================== */
+
+
+@media(max-width:1200px){
+
+
+.stats-section{
+
+    grid-template-columns:repeat(2,minmax(0,1fr));
+
+}
+
+
+
+.dashboard-row-large,
+.dashboard-row-small{
+
+    grid-template-columns:1fr;
+
+}
+
+
+}
+
+
+
+/* ==========================================================
+   TABLET
+========================================================== */
+
+
+@media(max-width:900px){
+
+
+.admin-main{
+
+    margin-left:0;
+
+    width:100%;
+
+    padding:16px;
+
+}
+
+
+
+.stats-section{
+
+    grid-template-columns:1fr;
+
+}
+
+
+}
+
+
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+
+@media(max-width:600px){
+
+
+.dashboard-layout{
+
+    gap:16px;
+
+}
+
+
+.dashboard-row{
+
+    gap:16px;
+
+}
+
+
+}

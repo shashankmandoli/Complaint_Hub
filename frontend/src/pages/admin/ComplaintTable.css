@@ -1,0 +1,310 @@
+/* ==========================================================
+   COMPLAINT TABLE
+========================================================== */
+
+.table-card {
+  background: #ffffff;
+  border: 1px solid #edf0f5;
+  border-radius: 18px;
+  padding: 22px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 18px;
+}
+
+.table-header h2 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  color: #1f2937;
+}
+
+.table-header p {
+  margin-top: 4px;
+
+  font-size: 13px;
+
+  color: #9ca3af;
+}
+
+.view-all-btn {
+  border: none;
+
+  background: #f5f3ff;
+
+  color: #7c3aed;
+
+  padding: 8px 16px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  transition: 0.25s ease;
+}
+
+.view-all-btn:hover {
+  background: #7c3aed;
+  color: white;
+}
+
+/* ==========================================================
+   TABLE
+========================================================== */
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-wrapper thead th {
+  padding: 14px 12px;
+
+  text-align: left;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+  letter-spacing: .4px;
+
+  color: #6b7280;
+
+  background: #fafbfc;
+
+  border-bottom: 1px solid #edf0f5;
+}
+
+.table-wrapper tbody td {
+  padding: 16px 12px;
+
+  font-size: 14px;
+
+  color: #374151;
+
+  border-bottom: 1px solid #f3f4f6;
+
+  vertical-align: middle;
+}
+
+.table-wrapper tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table-wrapper tbody tr {
+  transition: background .2s ease;
+}
+
+.table-wrapper tbody tr:hover {
+  background: #faf8ff;
+}
+
+/* ==========================================================
+   ID
+========================================================== */
+
+.complaint-id {
+  font-weight: 600;
+  color: #7c3aed;
+}
+
+/* ==========================================================
+   PRIORITY BADGES
+========================================================== */
+
+.priority {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 70px;
+
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.priority.high {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.priority.medium {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.priority.low {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+/* ==========================================================
+   STATUS BADGES
+========================================================== */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 105px;
+
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status.pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status.progress {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.status.resolved {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+/* ==========================================================
+   ACTION BUTTON
+========================================================== */
+
+.table-action {
+  border: none;
+
+  background: #7c3aed;
+
+  color: white;
+
+  padding: 8px 14px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  transition: .25s ease;
+}
+
+.table-action:hover {
+  background: #6d28d9;
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width: 900px) {
+
+  .table-card {
+    padding: 18px;
+  }
+
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .table-wrapper table {
+    min-width: 760px;
+  }
+
+}
+/* ==========================================================
+   AGENT COLUMN
+========================================================== */
+
+.agent-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.agent-name {
+  font-weight: 600;
+  color: #374151;
+  font-size: 13px;
+}
+
+.agent-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+
+  padding: 4px 10px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.agent-status.unassigned {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.agent-status.pending-response {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.agent-status.accepted {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.agent-status.rejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.agent-reassigning {
+  font-size: 11px;
+  color: #9ca3af;
+  font-style: italic;
+}

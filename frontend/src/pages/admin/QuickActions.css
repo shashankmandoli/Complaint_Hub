@@ -1,0 +1,137 @@
+/* =====================================
+   QUICK ACTIONS CARD
+===================================== */
+
+.quick-actions-card{
+
+    background:#ffffff;
+
+    border:none;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    box-shadow:0 8px 24px rgba(15,23,42,0.05);
+
+}
+
+
+/* HEADER */
+
+.quick-header{
+
+    margin-bottom:16px;
+
+}
+
+.quick-header h2{
+
+    margin:0;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    color:#1f2937;
+
+}
+
+
+/* =====================================
+   VERTICAL LIST
+===================================== */
+
+.quick-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+
+/* =====================================
+   ACTION ITEM
+===================================== */
+
+.quick-item{
+
+    width:100%;
+
+    border:none;
+
+    background:#faf8ff;
+
+    border-radius:14px;
+
+    padding:14px 16px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    cursor:pointer;
+
+    color:#374151;
+
+    font-size:14px;
+
+    font-weight:500;
+
+    transition:.25s ease;
+
+}
+
+
+.quick-item:hover{
+
+    background:#7c3aed;
+
+    color:white;
+
+    transform:translateX(3px);
+
+}
+
+
+/* =====================================
+   ICON
+===================================== */
+
+.quick-icon{
+
+    width:40px;
+
+    height:40px;
+
+    border-radius:12px;
+
+    background:#ede9fe;
+
+    color:#7c3aed;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:17px;
+
+    flex-shrink:0;
+
+}
+
+
+.quick-item:hover .quick-icon{
+
+    background:white;
+
+    color:#7c3aed;
+
+}

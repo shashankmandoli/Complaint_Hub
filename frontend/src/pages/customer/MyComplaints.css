@@ -1,0 +1,209 @@
+.my-complaints-page {
+  max-width: 900px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 26px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  color: #1f2937;
+  margin: 0 0 6px;
+}
+
+.page-header p {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0;
+}
+
+.raise-btn {
+  border: none;
+  background: #7c3aed;
+  color: white;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 11px 18px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s;
+}
+
+.raise-btn:hover {
+  background: #6d28d9;
+}
+
+/* Stats strip */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+.stat-card h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #1f2937;
+}
+
+.stat-card p {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: #9ca3af;
+}
+
+.stat-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.stat-card.total .stat-icon {
+  background: #f3edff;
+  color: #7c3aed;
+}
+
+.stat-card.pending .stat-icon {
+  background: #fff4d9;
+  color: #c28a00;
+}
+
+.stat-card.progress .stat-icon {
+  background: #dff4ff;
+  color: #0078d4;
+}
+
+.stat-card.resolved .stat-icon {
+  background: #dff7e7;
+  color: #188038;
+}
+
+@media (max-width: 700px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Empty state */
+.empty-state {
+  background: #fff;
+  border-radius: 18px;
+  padding: 50px 30px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.empty-icon {
+  font-size: 32px;
+  color: #c4b5fd;
+  margin-bottom: 12px;
+}
+
+.empty-state h3 {
+  margin: 0 0 6px;
+  color: #1f2937;
+  font-size: 18px;
+}
+
+.empty-state p {
+  margin: 0 0 20px;
+  font-size: 14px;
+}
+
+.empty-state .raise-btn {
+  margin: 0 auto;
+}
+
+/* Complaint list */
+.complaints-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.complaint-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.complaint-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+.complaint-main h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: #1f2937;
+}
+
+.meta {
+  margin: 0;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.complaint-side {
+  text-align: right;
+}
+
+.agent-info {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  color: #6b7280;
+}
+
+.status {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pending {
+  background: #fff4d9;
+  color: #c28a00;
+}
+
+.progress {
+  background: #dff4ff;
+  color: #0078d4;
+}
+
+.resolved {
+  background: #dff7e7;
+  color: #188038;
+}
