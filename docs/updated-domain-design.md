@@ -28,29 +28,29 @@ This allows the user who created the complaint to confirm that the problem has a
 
 ---
 
-## 22.2 Reopening a Resolved Complaint
+## 22.2 Complaint Resolution and Closure
 
-A resolved complaint can be reopened.
+An Agent is responsible for resolving a complaint.
 
-If a user determines that the issue still exists after the Agent marks the complaint as resolved, the complaint can return to the `IN_PROGRESS` status.
-
-The lifecycle is:
+The complaint lifecycle is:
 
 ```text
-IN_PROGRESS
-     ↓
-RESOLVED
-     │
-     ├── User confirms resolution
-     │         ↓
-     │      CLOSED
-     │
-     └── User reports issue still exists
-               ↓
-          IN_PROGRESS
+Agent resolves complaint
+        ↓
+Status: RESOLVED
+        ↓
+User reviews resolution
+        ↓
+User confirms solution
+        ↓
+Status: CLOSED
 ```
 
-This prevents complaints from being permanently closed before the user confirms that the problem has been resolved.
+Once a complaint is resolved, it cannot be reopened.
+
+If the user experiences the same or a related problem again, the user must create a new complaint.
+
+This ensures that each complaint represents a separate complaint lifecycle and preserves the historical record of previously resolved issues.
 
 ---
 
@@ -175,14 +175,12 @@ The finalized complaint lifecycle for the initial version is:
                         │ RESOLVED │
                         └────┬─────┘
                              │
-              ┌──────────────┴──────────────┐
-              │                             │
-      User confirms solution        User reopens complaint
-              │                             │
-              ▼                             ▼
-         ┌────────┐                  ┌─────────────┐
-         │ CLOSED │                  │ IN_PROGRESS │
-         └────────┘                  └─────────────┘
+                    User confirms solution
+                             │
+                             ▼
+                         ┌────────┐
+                         │ CLOSED │
+                         └────────┘
 ```
 
 A complaint may also be rejected during the initial review stage.
@@ -192,15 +190,15 @@ OPEN
  │
  ├── Assigned to Agent
  │
- ▼
-ASSIGNED
- │
- │
- └── Rejected if invalid
+ └── Rejected by Admin
           │
           ▼
       REJECTED
 ```
+
+Once a complaint reaches `RESOLVED`, it cannot return to a previous status.
+
+If a similar or new issue occurs, the User must create a new Complaint.
 
 ---
 
@@ -215,7 +213,6 @@ The allowed complaint status transitions are:
 | ASSIGNED | IN_PROGRESS | ASSIGNED AGENT |
 | IN_PROGRESS | RESOLVED | ASSIGNED AGENT |
 | RESOLVED | CLOSED | COMPLAINT OWNER |
-| RESOLVED | IN_PROGRESS | COMPLAINT OWNER |
 
 The initial version does not allow arbitrary status changes.
 
@@ -224,10 +221,6 @@ For example:
 ```text
 OPEN → RESOLVED
 ```
-
-is not allowed.
-
-The complaint must follow the defined lifecycle.
 
 ---
 

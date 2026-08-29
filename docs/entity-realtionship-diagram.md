@@ -9,6 +9,7 @@ This design will later be used to create:
 - Oracle database tables
 - Primary keys
 - Foreign keys
+- Database constraints
 - Hibernate entity relationships
 - Java domain models
 
@@ -16,7 +17,7 @@ This document focuses on entity relationships and cardinality rather than databa
 
 ---
 
-# 1. Design Workflow
+# 1. Development Workflow
 
 The Complaint-Hub backend development follows the workflow:
 
@@ -51,7 +52,7 @@ COMPLAINT
 COMPLAINT_UPDATE
 ```
 
-The system also contains several enumerated values:
+The system also contains several enumerated value types:
 
 ```text
 ROLE
@@ -59,7 +60,7 @@ PRIORITY
 COMPLAINT_STATUS
 ```
 
-These enumerations are currently considered value types rather than independent entities.
+These value types are not treated as independent entities in the initial design.
 
 ---
 
@@ -88,7 +89,7 @@ User
 └── updatedAt
 ```
 
-The User entity represents all three system actors.
+The same User entity represents all system actors.
 
 ```text
                     USER
@@ -99,15 +100,15 @@ The User entity represents all three system actors.
         USER        AGENT       ADMIN
 ```
 
-The role determines what operations the User is allowed to perform.
+The role determines the operations and permissions available to the user.
 
 ---
 
 # 4. Category Entity
 
-The Category entity represents a classification for complaints.
+The Category entity represents the classification of a Complaint.
 
-Examples:
+Examples may include:
 
 ```text
 Technical
@@ -129,13 +130,15 @@ Category
 
 A Category can contain multiple Complaints.
 
+Each Complaint belongs to one Category.
+
 ---
 
 # 5. Complaint Entity
 
-The Complaint is the central entity of the Complaint-Hub system.
+The Complaint is the central entity of the Complaint-Hub application.
 
-A Complaint is created by a User and progresses through the complaint lifecycle until it is resolved and closed.
+A Complaint is created by a User and progresses through the defined complaint lifecycle.
 
 Conceptually:
 
@@ -160,13 +163,39 @@ A Complaint has relationships with:
 - Category
 - Complaint Updates
 
+The Complaint lifecycle is:
+
+```text
+OPEN
+  ↓
+ASSIGNED
+  ↓
+IN_PROGRESS
+  ↓
+RESOLVED
+  ↓
+CLOSED
+```
+
+An alternative path is:
+
+```text
+OPEN
+  ↓
+REJECTED
+```
+
+A resolved or closed Complaint cannot be reopened.
+
+If the User experiences the same or a similar problem again, a new Complaint must be created.
+
 ---
 
 # 6. ComplaintUpdate Entity
 
 The ComplaintUpdate entity represents an update or additional information related to a Complaint.
 
-Updates can be created by different users depending on their role.
+Updates allow the system to maintain a history of important events and communication.
 
 Examples include:
 
@@ -174,7 +203,7 @@ Examples include:
 - Agent provides a progress update
 - Agent provides resolution details
 - Admin provides an administrative update
-- User requests reopening of a complaint
+- Admin provides a rejection reason
 
 Conceptually:
 
@@ -189,13 +218,13 @@ ComplaintUpdate
 
 A Complaint can contain multiple Complaint Updates.
 
-Each Complaint Update belongs to one Complaint.
+Each ComplaintUpdate belongs to exactly one Complaint.
 
 ---
 
 # 7. Enumerated Value Types
 
-The following values are not separate entities in the initial design.
+The following concepts are represented as predefined values rather than separate entities.
 
 ---
 
@@ -207,7 +236,7 @@ AGENT
 ADMIN
 ```
 
-Role determines the permissions of a User.
+Role determines the permissions available to a User.
 
 ---
 
@@ -235,9 +264,9 @@ CLOSED
 REJECTED
 ```
 
-Complaint Status represents the current state of a Complaint.
+Complaint Status represents the current stage of a Complaint.
 
-The allowed transitions are controlled by business rules.
+The allowed status transitions are controlled by business rules.
 
 ---
 
@@ -297,13 +326,7 @@ From the Complaint perspective:
 COMPLAINT * ─────────── 1 USER
 ```
 
-This is a:
-
-```text
-One-to-Many relationship
-```
-
-The Complaint stores a reference to the User who created it.
+This is a One-to-Many relationship.
 
 Conceptually:
 
@@ -313,14 +336,22 @@ Complaint
 └── createdBy → User
 ```
 
+The Complaint creator is required.
+
+A Complaint cannot exist without knowing which User created it.
+
 ---
 
 # 10. User to Complaint Assigned Agent Relationship
 
-An Agent is represented using the User entity with:
+An Agent is not represented as a separate entity.
+
+An Agent is represented as:
 
 ```text
-role = AGENT
+User
+│
+└── role = AGENT
 ```
 
 One Agent can be assigned multiple Complaints.
@@ -357,17 +388,29 @@ Complaint
 └── assignedAgent → User
 ```
 
-A Complaint may initially have no assigned Agent while its status is:
+The assigned Agent is optional when the Complaint is first created.
+
+Example:
 
 ```text
-OPEN
+New Complaint
+
+Status: OPEN
+Assigned Agent: None
 ```
 
-Therefore, the assigned Agent relationship is optional during complaint creation.
+After assignment:
+
+```text
+Complaint
+
+Status: ASSIGNED
+Assigned Agent: Agent A
+```
 
 ---
 
-# 11. Important User and Complaint Relationship Distinction
+# 11. Complaint User Relationship Distinction
 
 The Complaint entity has two different relationships with the User entity.
 
@@ -377,7 +420,9 @@ Complaint
 └── assignedAgent → User
 ```
 
-Although both relationships point to the same User entity, they represent different business meanings.
+Although both relationships point to the User entity, they represent different business responsibilities.
+
+---
 
 ## createdBy
 
@@ -387,8 +432,12 @@ Example:
 
 ```text
 Complaint #101
-Created By: John
+
+Created By:
+John
 ```
+
+---
 
 ## assignedAgent
 
@@ -398,10 +447,12 @@ Example:
 
 ```text
 Complaint #101
-Assigned Agent: Alice
+
+Assigned Agent:
+Alice
 ```
 
-These relationships must be treated separately in both the database design and Hibernate entity mapping.
+These relationships must remain separate in the database design and Hibernate entity mapping.
 
 ---
 
@@ -409,7 +460,7 @@ These relationships must be treated separately in both the database design and H
 
 A Category can contain multiple Complaints.
 
-Each Complaint belongs to one Category.
+Each Complaint belongs to exactly one Category.
 
 Example:
 
@@ -433,8 +484,6 @@ From the Complaint perspective:
 COMPLAINT * ─────────── 1 CATEGORY
 ```
 
-This is a One-to-Many relationship.
-
 Conceptually:
 
 ```text
@@ -443,13 +492,17 @@ Complaint
 └── category → Category
 ```
 
+The Category relationship is required.
+
+Every Complaint must belong to a Category.
+
 ---
 
 # 13. Complaint to ComplaintUpdate Relationship
 
 A Complaint can contain multiple Complaint Updates.
 
-Each Complaint Update belongs to exactly one Complaint.
+Each ComplaintUpdate belongs to exactly one Complaint.
 
 Example:
 
@@ -482,7 +535,19 @@ Complaint
 └── updates → List<ComplaintUpdate>
 ```
 
-This relationship allows the application to maintain the history and progress of a Complaint.
+A Complaint may initially have no updates.
+
+Therefore:
+
+```text
+Complaint → ComplaintUpdate
+
+0..*
+```
+
+However, every ComplaintUpdate must belong to exactly one Complaint.
+
+A ComplaintUpdate cannot exist independently.
 
 ---
 
@@ -490,9 +555,9 @@ This relationship allows the application to maintain the history and progress of
 
 A User can create multiple Complaint Updates.
 
-Each Complaint Update is created by exactly one User.
+Each ComplaintUpdate is created by exactly one User.
 
-The User may have different roles.
+The creator can have different roles.
 
 Examples:
 
@@ -504,12 +569,14 @@ USER
 
 AGENT
 │
-└── Provides progress or resolution updates
+└── Provides progress updates
+    and resolution information
 
 
 ADMIN
 │
 └── Provides administrative updates
+    or rejection reasons
 ```
 
 Relationship:
@@ -532,11 +599,13 @@ ComplaintUpdate
 └── createdBy → User
 ```
 
+Every ComplaintUpdate must have a creator.
+
 ---
 
 # 15. Relationship Cardinality Summary
 
-The following table summarizes the initial relationships.
+The following table summarizes the initial entity relationships.
 
 | Entity A | Relationship | Entity B | Cardinality |
 |---|---|---|---|
@@ -558,63 +627,61 @@ From the reverse perspective:
 
 ---
 
-# 16. Optional and Required Relationships
+# 16. Required and Optional Relationships
 
 Not every relationship has the same requirement.
 
 ---
 
-## Complaint Creator
+## 16.1 Complaint Creator
 
 A Complaint must always have a creator.
 
 ```text
-Complaint → createdBy → Required
+Complaint
+│
+└── createdBy → Required
 ```
-
-A Complaint cannot exist without knowing which User created it.
 
 ---
 
-## Complaint Category
+## 16.2 Complaint Category
 
 A Complaint must always belong to a Category.
 
 ```text
-Complaint → category → Required
+Complaint
+│
+└── category → Required
 ```
 
 ---
 
-## Assigned Agent
+## 16.3 Assigned Agent
 
-A Complaint does not require an assigned Agent when first created.
+A Complaint does not require an assigned Agent when it is first created.
 
 ```text
 OPEN Complaint
-      │
-      └── assignedAgent = null
-```
 
-After an Admin assigns the Complaint:
-
-```text
-Complaint
-│
-└── assignedAgent → Agent
+assignedAgent = null
 ```
 
 Therefore:
 
 ```text
-Complaint → assignedAgent → Optional
+Complaint
+│
+└── assignedAgent → Optional
 ```
+
+After assignment, the assigned Agent becomes responsible for handling the Complaint.
 
 ---
 
-## Complaint Updates
+## 16.4 Complaint Updates
 
-A Complaint may initially have no additional updates.
+A Complaint may have zero or more Complaint Updates.
 
 ```text
 Complaint
@@ -622,7 +689,7 @@ Complaint
 └── updates → 0..*
 ```
 
-However, every ComplaintUpdate must belong to exactly one Complaint.
+However:
 
 ```text
 ComplaintUpdate
@@ -632,7 +699,7 @@ ComplaintUpdate
 
 ---
 
-## ComplaintUpdate Creator
+## 16.5 ComplaintUpdate Creator
 
 Every ComplaintUpdate must have a creator.
 
@@ -646,54 +713,57 @@ ComplaintUpdate
 
 # 17. Conceptual Entity Relationship Diagram
 
-The complete initial conceptual relationship model is:
+The complete conceptual entity relationship model is:
 
 ```text
-                             ┌──────────────────┐
-                             │       USER       │
-                             ├──────────────────┤
-                             │ id               │
-                             │ name             │
-                             │ email            │
-                             │ password         │
-                             │ role             │
-                             │ createdAt        │
-                             │ updatedAt        │
-                             └────────┬─────────┘
-                                      │
-              ┌───────────────────────┼────────────────────────┐
-              │                       │                        │
-              │ creates               │ assigned as            │ creates
-              │                       │ Agent                  │
-              ▼                       ▼                        ▼
-       ┌───────────────┐        ┌───────────────┐      ┌───────────────────┐
-       │   COMPLAINT   │◄───────│     USER      │─────►│ COMPLAINT_UPDATE  │
-       ├───────────────┤        └───────────────┘      ├───────────────────┤
-       │ id            │                               │ id                │
-       │ title         │                               │ message           │
-       │ description   │                               │ createdAt         │
-       │ priority      │                               │ createdBy         │
-       │ status        │                               │ complaint         │
-       │ createdAt     │                               └─────────┬─────────┘
-       │ updatedAt     │                                         │
-       │ createdBy     │                                         │ belongs to
-       │ assignedAgent │◄────────────────────────────────────────┘
-       │ category      │
-       └───────┬───────┘
-               │
-               │ belongs to
-               ▼
-        ┌───────────────┐
-        │   CATEGORY    │
-        ├───────────────┤
-        │ id            │
-        │ name          │
-        │ description   │
-        │ active        │
-        └───────────────┘
+                              ┌──────────────────┐
+                              │       USER       │
+                              ├──────────────────┤
+                              │ id               │
+                              │ name             │
+                              │ email            │
+                              │ password         │
+                              │ role             │
+                              │ createdAt        │
+                              │ updatedAt        │
+                              └────────┬─────────┘
+                                       │
+             ┌─────────────────────────┼─────────────────────────┐
+             │                         │                         │
+             │ creates                 │ assigned as Agent       │ creates
+             │                         │                         │
+             ▼                         ▼                         ▼
+
+       ┌─────────────────────────────────────┐       ┌─────────────────────┐
+       │              COMPLAINT              │       │  COMPLAINT_UPDATE   │
+       ├─────────────────────────────────────┤       ├─────────────────────┤
+       │ id                                  │◄──────│ complaint           │
+       │ title                               │       │ id                  │
+       │ description                         │       │ message             │
+       │ priority                            │       │ createdAt           │
+       │ status                              │       │ createdBy           │
+       │ createdAt                           │       └─────────────────────┘
+       │ updatedAt                           │
+       │ createdBy → USER                    │
+       │ assignedAgent → USER                │
+       │ category → CATEGORY                 │
+       └──────────────────┬──────────────────┘
+                          │
+                          │ belongs to
+                          ▼
+                   ┌───────────────┐
+                   │   CATEGORY    │
+                   ├───────────────┤
+                   │ id            │
+                   │ name          │
+                   │ description   │
+                   │ active        │
+                   └───────────────┘
 ```
 
-The diagram is conceptual and will be refined when designing the physical database schema.
+The diagram represents the conceptual entity relationships.
+
+The physical database schema will later define the actual primary keys and foreign keys.
 
 ---
 
@@ -701,11 +771,13 @@ The diagram is conceptual and will be refined when designing the physical databa
 
 The entity relationships must follow the following rules.
 
+---
+
 ## User and Complaint
 
 - A User can create multiple Complaints.
 - Every Complaint has exactly one creator.
-- A Complaint creator cannot be null.
+- The Complaint creator cannot be null.
 
 ---
 
@@ -715,7 +787,7 @@ The entity relationships must follow the following rules.
 - A Complaint can have only one currently assigned Agent.
 - A Complaint may initially have no assigned Agent.
 - The assigned User must have the `AGENT` role.
-- Assignment history is not part of the initial version.
+- Assignment history is not included in the initial version.
 
 ---
 
@@ -731,7 +803,7 @@ The entity relationships must follow the following rules.
 
 - A Complaint can have zero or more Complaint Updates.
 - Every ComplaintUpdate belongs to one Complaint.
-- A ComplaintUpdate cannot exist independently without a Complaint.
+- A ComplaintUpdate cannot exist independently.
 
 ---
 
@@ -739,42 +811,55 @@ The entity relationships must follow the following rules.
 
 - A User can create multiple Complaint Updates.
 - Every ComplaintUpdate has exactly one creator.
-- The creator may be a User, Agent, or Admin.
+- The creator may have the role `USER`, `AGENT`, or `ADMIN`.
 
 ---
 
 # 19. Design Decisions
 
-## Decision 1: Agent Is Not a Separate Entity
+## Decision 1: Common User Entity
 
-Agents are represented using the User entity.
+Users, Agents, and Admins are represented using a common User entity.
 
 ```text
 User
 │
-└── role = AGENT
+└── role
+     ├── USER
+     ├── AGENT
+     └── ADMIN
 ```
 
-This avoids creating duplicate entities for Users, Agents, and Admins.
+This avoids duplicate entities and simplifies authentication and authorization.
 
 ---
 
-## Decision 2: Complaint Has Two User References
+## Decision 2: Complaint Has Two User Relationships
 
-The Complaint entity contains two references to User.
+The Complaint entity contains two separate references to User.
 
 ```text
 createdBy
 assignedAgent
 ```
 
-These references represent different relationships and business responsibilities.
+These relationships represent different responsibilities.
+
+```text
+createdBy
+    ↓
+Who created the Complaint
+
+assignedAgent
+    ↓
+Who is responsible for resolving the Complaint
+```
 
 ---
 
-## Decision 3: Assignment History Is Not Included Initially
+## Decision 3: Assignment History Is Not Included
 
-The system stores only the currently assigned Agent.
+The initial version stores only the currently assigned Agent.
 
 ```text
 Complaint
@@ -782,27 +867,29 @@ Complaint
 └── assignedAgent
 ```
 
-Historical assignments may be introduced later if required.
+Historical assignments are outside the initial project scope.
 
 ---
 
 ## Decision 4: ComplaintUpdate Preserves History
 
-Complaint updates are stored separately instead of modifying the original Complaint.
+Complaint updates are stored separately from the original Complaint.
 
-This allows the system to preserve:
+This preserves:
 
-- Additional user information
+- Additional information from Users
 - Agent progress updates
 - Resolution information
 - Administrative updates
-- Reopening information
+- Rejection reasons
+
+The original Complaint details remain unchanged after creation.
 
 ---
 
 ## Decision 5: Enumerations Are Not Separate Entities
 
-The following concepts will initially be represented as enumerated values:
+The following concepts are represented using predefined values:
 
 ```text
 Role
@@ -810,28 +897,65 @@ Priority
 ComplaintStatus
 ```
 
-Separate database tables are not required for these values in the initial version.
+Separate database entities are not required for these concepts in the initial version.
+
+---
+
+## Decision 6: Complaints Cannot Be Reopened
+
+Each Complaint represents a single complaint lifecycle.
+
+The lifecycle is:
+
+```text
+OPEN
+  ↓
+ASSIGNED
+  ↓
+IN_PROGRESS
+  ↓
+RESOLVED
+  ↓
+CLOSED
+```
+
+A Complaint may alternatively be rejected while in the `OPEN` state.
+
+```text
+OPEN
+  ↓
+REJECTED
+```
+
+Once a Complaint reaches `RESOLVED` or `CLOSED`, it cannot return to a previous state.
+
+If a User experiences the same or a similar problem again, the User must create a new Complaint.
+
+This preserves the history of completed complaint lifecycles and keeps the initial workflow simple.
 
 ---
 
 # 20. Initial Data Ownership Model
 
-The ownership of important data is defined as follows:
+The ownership of important data is conceptually represented as:
 
 ```text
 USER
 │
-├── owns
-│     └── Created Complaints
+├── creates
+│     │
+│     └── COMPLAINT
 │
 ├── may be assigned
-│     └── Complaints as Agent
+│     │
+│     └── COMPLAINT
 │
 └── creates
-      └── Complaint Updates
+      │
+      └── COMPLAINT_UPDATE
 ```
 
-The Complaint acts as the central business object.
+The Complaint acts as the central business entity.
 
 ```text
                     USER
@@ -849,55 +973,51 @@ The Complaint acts as the central business object.
 
 # 21. Future Relationship Extensions
 
-The current relationship model is intentionally kept simple.
+The current relationship model is intentionally simple.
 
-Possible future additions include:
+Possible future entities may include:
 
 ```text
 Complaint
 │
 ├── AssignmentHistory
-│
 ├── Attachment
-│
 ├── Notification
-│
 ├── Escalation
-│
 └── Resolution
 ```
 
-These are outside the initial scope.
+These entities are outside the scope of the initial version.
 
-The backend will first implement the core complaint management workflow.
+The first version will focus on the core complaint management workflow.
 
 ---
 
 # 22. Final Relationship Summary
 
-The initial Complaint-Hub entity relationship model contains:
+The Complaint-Hub entity relationship model contains the following core relationships:
 
 ```text
 USER
-│
-├── creates ──────────────── COMPLAINT
-│
-├── assigned to ──────────── COMPLAINT
-│
-└── creates ──────────────── COMPLAINT_UPDATE
+ │
+ ├── creates ──────────────── COMPLAINT
+ │
+ ├── assigned to ──────────── COMPLAINT
+ │
+ └── creates ──────────────── COMPLAINT_UPDATE
 
 
 CATEGORY
-│
-└── contains ─────────────── COMPLAINT
+ │
+ └── contains ─────────────── COMPLAINT
 
 
 COMPLAINT
-│
-└── contains ─────────────── COMPLAINT_UPDATE
+ │
+ └── contains ─────────────── COMPLAINT_UPDATE
 ```
 
-The Complaint entity acts as the central entity of the application.
+The Complaint is the central entity of the system.
 
 The initial design contains four primary entities:
 
@@ -912,11 +1032,11 @@ COMPLAINT_UPDATE
 
 # 23. Next Steps
 
-The entity relationships are now defined conceptually.
+The conceptual entity relationships are now defined.
 
-The next phase is to convert this conceptual design into a physical database schema.
+The next phase is to convert this design into a physical database schema.
 
-The next workflow will be:
+The next development workflow will be:
 
 ```text
 Entity Relationship Design
@@ -938,4 +1058,4 @@ Create Oracle Database Schema
 Configure Hibernate
 ```
 
-The next development phase will focus on Oracle database schema design.
+The next development phase will focus on designing the Oracle database schema for Complaint-Hub.
