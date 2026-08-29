@@ -23,6 +23,9 @@ target/
 *.iml
 *.ipr
 
+### IntelliJ IDEA compiled output ###
+out/
+
 ### Eclipse ###
 .apt_generated
 .classpath
