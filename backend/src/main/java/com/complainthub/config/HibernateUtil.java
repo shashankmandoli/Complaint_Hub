@@ -1,6 +1,6 @@
 package com.complainthub.config;
 
-import com.complainthub.entity.User;
+import com.complainthub.entity.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -31,7 +31,12 @@ public class HibernateUtil {
 
             Configuration config =
                     new Configuration().configure();
+
             config.addAnnotatedClass(User.class);
+            config.addAnnotatedClass(Category.class);
+            config.addAnnotatedClass(Complaint.class);
+            config.addAnnotatedClass(ComplaintAssignment.class);
+            config.addAnnotatedClass(ComplaintUpdate.class);
 
             config.setProperty(
                     "hibernate.connection.url",
