@@ -39,6 +39,9 @@ public class ComplaintAssignment {
     )
     private User assignedBy;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -80,6 +83,10 @@ public class ComplaintAssignment {
         this.assignedBy = assignedBy;
     }
 
+    public boolean isActive() { return active; }
+
+    public void setActive(boolean active) { this.active = active; }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -94,5 +101,16 @@ public class ComplaintAssignment {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @PrePersist
+    protected void onCreate(){
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        updatedAt = LocalDateTime.now();
     }
 }
