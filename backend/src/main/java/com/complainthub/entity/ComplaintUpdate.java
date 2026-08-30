@@ -36,10 +36,12 @@ public class ComplaintUpdate {
     private String message;
 
     @Column(nullable = false)
-    private String visibleToUser;
+    private boolean visibleToUser;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     public ComplaintUpdate() {
     }
@@ -76,11 +78,11 @@ public class ComplaintUpdate {
         this.message = message;
     }
 
-    public String getVisibleToUser() {
+    public boolean getVisibleToUser() {
         return visibleToUser;
     }
 
-    public void setVisibleToUser(String visibleToUser) {
+    public void setVisibleToUser(boolean visibleToUser) {
         this.visibleToUser = visibleToUser;
     }
 
@@ -90,5 +92,10 @@ public class ComplaintUpdate {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
     }
 }
