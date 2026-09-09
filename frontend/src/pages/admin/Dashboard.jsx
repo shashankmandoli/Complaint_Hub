@@ -8,11 +8,11 @@ import {
 } from "react-icons/fa";
 
 
-import StatsCard from "./StatsCard.jsx";
-import ComplaintTable from "./ComplaintTable.jsx";
-import AnalyticsCard from "./AnalyticsCard.jsx";
-import RecentActivity from "./RecentActivity.jsx";
-import QuickActions from "./QuickActions.jsx";
+import StatsCard from "./StatsCard";
+import ComplaintTable from "./ComplaintTable";
+import AnalyticsCard from "./AnalyticsCard";
+import RecentActivity from "./RecentActivity";
+import QuickActions from "./QuickActions";
 
 
 function Dashboard() {

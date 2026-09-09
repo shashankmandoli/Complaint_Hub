@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./UserManagement.css";
-import UserDetailsModal from "./UserDetailsModal.jsx";
+import UserDetailsModal from "./UserDetailsModal";
 
 const usersData = [
   { id: "USR-001", name: "Rahul Sharma", email: "rahul.sharma@example.com", role: "Citizen", status: "Active", joined: "12 Jan 2026" },

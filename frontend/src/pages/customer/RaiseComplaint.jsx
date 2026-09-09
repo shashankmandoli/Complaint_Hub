@@ -1,20 +1,33 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPaperPlane, FaTag, FaHistory } from "react-icons/fa";
-import { addComplaint, getComplaints } from "../../utils/mockComplaints.js";
+import {
+  addComplaint,
+  getComplaints,
+  CATEGORIES,
+  PRIORITIES,
+  STATUS_LABELS,
+} from "../../utils/mockComplaints";
+import ComplaintAttachmentPicker from "../../components/complaint/ComplaintAttachmentPicker";
 import "./RaiseComplaint.css";
 
 const statusClass = {
-  Pending: "status pending",
-  "In Progress": "status progress",
-  Resolved: "status resolved",
+  OPEN: "status pending",
+  ASSIGNED: "status progress",
+  IN_PROGRESS: "status progress",
+  RESOLVED: "status resolved",
+  CLOSED: "status resolved",
+  REJECTED: "status pending",
+  NEEDS_REASSIGNMENT: "status progress",
 };
 
 function RaiseComplaint() {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("Plumbing");
+  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [priority, setPriority] = useState("Medium");
   const [description, setDescription] = useState("");
+  const [attachmentItems, setAttachmentItems] = useState([]); // [{attachment, previewUrl}]
   const [submitted, setSubmitted] = useState(false);
   const [complaints, setComplaints] = useState([]);
 
@@ -33,7 +46,14 @@ function RaiseComplaint() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // TODO: replace with a real POST call via services/api.js once the backend is ready.
-    addComplaint({ title, category, description });
+    addComplaint({
+      title,
+      category,
+      priority,
+      description,
+      createdBy: "Customer",
+      attachments: attachmentItems.map((it) => it.attachment),
+    });
     setSubmitted(true);
     setTimeout(() => navigate("/customer/complaints"), 800);
   };
@@ -58,11 +78,16 @@ function RaiseComplaint() {
 
           <label>Category</label>
           <select value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option>Plumbing</option>
-            <option>Electrical</option>
-            <option>Civil</option>
-            <option>Billing</option>
-            <option>Other</option>
+            {CATEGORIES.map((c) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
+
+          <label>Priority</label>
+          <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+            {PRIORITIES.map((p) => (
+              <option key={p}>{p}</option>
+            ))}
           </select>
 
           <label>Description</label>
@@ -73,6 +98,9 @@ function RaiseComplaint() {
             onChange={(e) => setDescription(e.target.value)}
             required
           />
+
+          <label>Attachments</label>
+          <ComplaintAttachmentPicker items={attachmentItems} onChange={setAttachmentItems} />
 
           <button type="submit" className="submit-btn">
             <FaPaperPlane />
@@ -112,10 +140,10 @@ function RaiseComplaint() {
                   <div className="recent-item" key={c.id}>
                     <div>
                       <p className="recent-title">{c.title}</p>
-                      <p className="recent-date">{c.createdAt}</p>
+                      <p className="recent-date">{new Date(c.createdAt).toLocaleDateString()}</p>
                     </div>
                     <span className={statusClass[c.status] || "status pending"}>
-                      {c.status}
+                      {STATUS_LABELS[c.status] || c.status}
                     </span>
                   </div>
                 ))}

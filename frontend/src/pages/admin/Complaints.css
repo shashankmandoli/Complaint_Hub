@@ -299,3 +299,35 @@ tbody tr:hover {
     }
 
 }
+/* New lifecycle statuses */
+.status.assigned {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.status.closed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status.rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.status.reassignment {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.empty-row {
+  text-align: center;
+  padding: 30px 0 !important;
+  color: #94a3b8;
+}
+/* Action column: center the header label and the button under it so the
+   button doesn't hug one edge of a wider auto-sized column. */
+th:last-child,
+td:last-child {
+  text-align: center;
+}

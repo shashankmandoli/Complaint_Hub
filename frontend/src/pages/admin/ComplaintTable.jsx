@@ -1,78 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ComplaintTable.css";
-import ComplaintDetailsModal from "./ComplaintDetailsModal.jsx";
+import ComplaintDetailsModal from "./ComplaintDetailsModal";
+import { getComplaints, STATUS, STATUS_LABELS } from "../../utils/mockComplaints";
 
-const initialComplaints = [
-  {
-    id: "CMP-1001",
-    user: "Rahul Sharma",
-    category: "Water Supply",
-    priority: "High",
-    status: "Pending",
-    agent: null,
-  },
-  {
-    id: "CMP-1002",
-    user: "Priya Verma",
-    category: "Electricity",
-    priority: "Medium",
-    status: "In Progress",
-    agent: { name: "Neha Singh", status: "accepted" },
-  },
-  {
-    id: "CMP-1003",
-    user: "Amit Kumar",
-    category: "Road Damage",
-    priority: "Low",
-    status: "Resolved",
-    agent: { name: "Raj Malhotra", status: "accepted" },
-  },
-  {
-    id: "CMP-1004",
-    user: "Sneha Gupta",
-    category: "Garbage",
-    priority: "High",
-    status: "Pending",
-    agent: { name: "Kavita Rao", status: "rejected" },
-  },
-  {
-    id: "CMP-1005",
-    user: "Rohit Singh",
-    category: "Street Light",
-    priority: "Medium",
-    status: "Resolved",
-    agent: { name: "Suresh Nair", status: "accepted" },
-  },
-];
+const STATUS_CLASS = {
+  [STATUS.OPEN]: "pending",
+  [STATUS.ASSIGNED]: "progress",
+  [STATUS.IN_PROGRESS]: "progress",
+  [STATUS.RESOLVED]: "resolved",
+  [STATUS.CLOSED]: "resolved",
+  [STATUS.REJECTED]: "pending",
+  [STATUS.NEEDS_REASSIGNMENT]: "progress",
+};
 
 function ComplaintTable() {
   const navigate = useNavigate();
-  const [complaints, setComplaints] = useState(initialComplaints);
-  const [selectedComplaint, setSelectedComplaint] = useState(null);
+  const [complaints, setComplaints] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
 
-  const handleReassign = (complaintId, agentName) => {
-    setComplaints((prev) =>
-      prev.map((item) =>
-        item.id === complaintId
-          ? { ...item, agent: { name: agentName, status: "pending" }, status: "In Progress" }
-          : item
-      )
-    );
+  const refresh = () => {
+    const all = getComplaints();
+    const recent = [...all]
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 5);
+    setComplaints(recent);
   };
 
-  const getStatusClass = (status) => {
-    switch (status) {
-      case "Pending":
-        return "pending";
-      case "In Progress":
-        return "progress";
-      case "Resolved":
-        return "resolved";
-      default:
-        return "";
-    }
-  };
+  useEffect(() => {
+    refresh();
+  }, []);
 
   const getPriorityClass = (priority) => {
     switch (priority) {
@@ -87,34 +44,15 @@ function ComplaintTable() {
     }
   };
 
-  const renderAgentCell = (agent) => {
-    if (!agent) {
+  const renderAgentCell = (assignedAgent) => {
+    if (!assignedAgent) {
       return <span className="agent-status unassigned">Unassigned</span>;
-    }
-
-    if (agent.status === "accepted") {
-      return (
-        <div className="agent-cell">
-          <span className="agent-name">{agent.name}</span>
-          <span className="agent-status accepted">Accepted</span>
-        </div>
-      );
-    }
-
-    if (agent.status === "rejected") {
-      return (
-        <div className="agent-cell">
-          <span className="agent-name">{agent.name}</span>
-          <span className="agent-status rejected">Rejected</span>
-          <span className="agent-reassigning">Reassigning agent...</span>
-        </div>
-      );
     }
 
     return (
       <div className="agent-cell">
-        <span className="agent-name">{agent.name}</span>
-        <span className="agent-status pending-response">Awaiting response</span>
+        <span className="agent-name">{assignedAgent}</span>
+        <span className="agent-status accepted">Assigned</span>
       </div>
     );
   };
@@ -153,7 +91,7 @@ function ComplaintTable() {
             {complaints.map((item) => (
               <tr key={item.id}>
                 <td className="complaint-id">{item.id}</td>
-                <td>{item.user}</td>
+                <td>{item.createdBy}</td>
                 <td>{item.category}</td>
 
                 <td>
@@ -163,17 +101,17 @@ function ComplaintTable() {
                 </td>
 
                 <td>
-                  <span className={`status ${getStatusClass(item.status)}`}>
-                    {item.status}
+                  <span className={`status ${STATUS_CLASS[item.status] || ""}`}>
+                    {STATUS_LABELS[item.status] || item.status}
                   </span>
                 </td>
 
-                <td>{renderAgentCell(item.agent)}</td>
+                <td>{renderAgentCell(item.assignedAgent)}</td>
 
                 <td>
                   <button
                     className="table-action"
-                    onClick={() => setSelectedComplaint(item)}
+                    onClick={() => setSelectedId(item.id)}
                   >
                     View
                   </button>
@@ -185,9 +123,9 @@ function ComplaintTable() {
       </div>
 
       <ComplaintDetailsModal
-        complaint={selectedComplaint}
-        onClose={() => setSelectedComplaint(null)}
-        onReassign={handleReassign}
+        complaintId={selectedId}
+        onClose={() => setSelectedId(null)}
+        onChanged={refresh}
       />
     </div>
   );

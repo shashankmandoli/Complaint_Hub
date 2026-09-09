@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./Agents.css";
-import AgentDetailsModal from "./AgentDetailsModal.jsx";
+import AgentDetailsModal from "./AgentDetailsModal";
 
 const agentsData = [
   { id: "AGT-101", name: "Neha Singh", email: "neha.singh@example.com", department: "Water Supply", status: "Active", assigned: 14 },

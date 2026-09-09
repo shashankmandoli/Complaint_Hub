@@ -1,0 +1,69 @@
+.resolution-card {
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+}
+
+.resolution-question {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.resolution-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.resolution-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.resolution-btn.yes {
+  background: #16a34a;
+  color: #fff;
+}
+
+.resolution-btn.yes:hover {
+  background: #15803d;
+}
+
+.resolution-btn.no {
+  background: #fff;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.resolution-btn.no:hover {
+  background: #fef2f2;
+}
+
+.resolution-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .resolution-actions {
+    flex-direction: column;
+  }
+
+  .resolution-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}

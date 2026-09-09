@@ -1,15 +1,30 @@
 import { useEffect, useState } from "react";
-import { getComplaints } from "../../utils/mockComplaints.js";
+import { useNavigate } from "react-router-dom";
+import { getComplaintsByAgent, STATUS, STATUS_LABELS } from "../../utils/mockComplaints";
 import "../customer/MyComplaints.css";
+
+// No auth yet, so the logged-in agent is mocked here — swap this for the
+// real signed-in agent's name once authentication exists.
+const CURRENT_AGENT_NAME = "Neha Singh";
+
+const statusClass = {
+  [STATUS.OPEN]: "status pending",
+  [STATUS.ASSIGNED]: "status progress",
+  [STATUS.IN_PROGRESS]: "status progress",
+  [STATUS.RESOLVED]: "status resolved",
+  [STATUS.CLOSED]: "status resolved",
+  [STATUS.REJECTED]: "status pending",
+  [STATUS.NEEDS_REASSIGNMENT]: "status progress",
+};
 
 function Dashboard() {
   const [complaints, setComplaints] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setComplaints(getComplaints());
+    // TODO: replace with a real GET call via services/api.js once the backend is ready.
+    setComplaints(getComplaintsByAgent(CURRENT_AGENT_NAME));
   }, []);
-
-  const assigned = complaints.filter((c) => c.agent);
 
   return (
     <div className="my-complaints-page">
@@ -18,19 +33,27 @@ function Dashboard() {
         <p>Complaints currently assigned to you.</p>
       </div>
 
-      {assigned.length === 0 ? (
+      {complaints.length === 0 ? (
         <div className="empty-state">No complaints assigned yet.</div>
       ) : (
         <div className="complaints-list">
-          {assigned.map((c) => (
-            <div className="complaint-card" key={c.id}>
+          {complaints.map((c) => (
+            <div
+              className="complaint-card"
+              key={c.id}
+              onClick={() => navigate(`/agent/complaints/${c.id}`)}
+              role="button"
+              tabIndex={0}
+            >
               <div className="complaint-main">
                 <h3>{c.title}</h3>
                 <p className="meta">
-                  {c.category} • {c.createdAt}
+                  {c.category} • {new Date(c.createdAt).toLocaleDateString()}
                 </p>
               </div>
-              <span className="status pending">{c.status}</span>
+              <span className={statusClass[c.status] || "status pending"}>
+                {STATUS_LABELS[c.status]}
+              </span>
             </div>
           ))}
         </div>

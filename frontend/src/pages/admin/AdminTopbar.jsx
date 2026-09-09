@@ -10,7 +10,7 @@ import {
   FaSignOutAlt,
   FaUser,
 } from "react-icons/fa";
-import AdminProfileModal from "./AdminProfileModal.jsx";
+import AdminProfileModal from "./AdminProfileModal";
 
 function AdminTopbar() {
   const navigate = useNavigate();

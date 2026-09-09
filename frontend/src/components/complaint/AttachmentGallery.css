@@ -1,0 +1,128 @@
+.attachment-gallery-empty {
+  margin: 0;
+  font-size: 13.5px;
+  color: #9ca3af;
+}
+
+.attachment-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.gallery-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  cursor: default;
+}
+
+.gallery-item[role="button"] {
+  cursor: pointer;
+}
+
+.gallery-item img,
+.gallery-item video {
+  width: 100%;
+  height: 96px;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-placeholder {
+  width: 100%;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: #a78bfa;
+  background: #f5f3ff;
+}
+
+.gallery-expand {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.55);
+  color: #fff;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-caption {
+  padding: 6px 8px;
+}
+
+.gallery-name {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gallery-meta {
+  margin: 2px 0 0;
+  font-size: 10.5px;
+  color: #9ca3af;
+}
+
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  padding: 24px;
+}
+
+.gallery-lightbox-content {
+  max-width: 90vw;
+  max-height: 85vh;
+  text-align: center;
+}
+
+.gallery-lightbox-content img,
+.gallery-lightbox-content video {
+  max-width: 90vw;
+  max-height: 78vh;
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+.gallery-lightbox-content p {
+  margin: 0;
+  color: #e2e8f0;
+  font-size: 13px;
+}
+
+.gallery-lightbox-close {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.gallery-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.22);
+}

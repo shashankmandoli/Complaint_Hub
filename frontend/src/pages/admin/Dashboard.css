@@ -219,12 +219,16 @@ body{
 ========================================================== */
 
 
-@media(max-width:1200px){
+/* BEFORE */
+@media(max-width:900px){
 
+.admin-main{
 
-.stats-section{
+    margin-left:0;
 
-    grid-template-columns:repeat(2,minmax(0,1fr));
+    width:100%;
+
+    padding:16px;
 
 }
 

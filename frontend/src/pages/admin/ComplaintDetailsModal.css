@@ -174,3 +174,28 @@
   color: #9ca3af;
   font-style: italic;
 }
+.modal-box.wide {
+  max-width: 640px;
+  max-height: 88vh;
+  overflow-y: auto;
+}
+
+.status.assigned {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.status.closed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status.rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.status.reassignment {
+  background: #ffedd5;
+  color: #c2410c;
+}

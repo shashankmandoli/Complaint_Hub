@@ -1,23 +1,24 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import AdminLayout from "./components/layout/AdminLayout.jsx";
-import PortalLayout from "./components/layout/PortalLayout.jsx";
+import AdminLayout from "./components/layout/AdminLayout";
+import PortalLayout from "./components/layout/PortalLayout";
 
-import Login from "./pages/auth/Login.jsx";
+import Login from "./pages/auth/Login";
 
-import Dashboard from "./pages/admin/Dashboard.jsx";
-import Complaints from "./pages/admin/Complaints.jsx";
-import UserManagement from "./pages/admin/UserManagement.jsx";
-import Agents from "./pages/admin/Agents.jsx";
-import Analytics from "./pages/admin/Analytics.jsx";
-import Reports from "./pages/admin/Reports.jsx";
-import Notifications from "./pages/admin/Notifications.jsx";
+import Dashboard from "./pages/admin/Dashboard";
+import Complaints from "./pages/admin/Complaints";
+import UserManagement from "./pages/admin/UserManagement";
+import Agents from "./pages/admin/Agents";
+import Analytics from "./pages/admin/Analytics";
+import Reports from "./pages/admin/Reports";
+import Notifications from "./pages/admin/Notifications";
 
-import RaiseComplaint from "./pages/customer/RaiseComplaint.jsx";
-import MyComplaints from "./pages/customer/MyComplaints.jsx";
-import ComplaintDetails from "./pages/customer/ComplaintDetails.jsx";
+import RaiseComplaint from "./pages/customer/RaiseComplaint";
+import MyComplaints from "./pages/customer/MyComplaints";
+import ComplaintDetails from "./pages/customer/ComplaintDetails";
 
-import AgentDashboard from "./pages/agent/Dashboard.jsx";
+import AgentDashboard from "./pages/agent/Dashboard";
+import AgentComplaintDetail from "./pages/agent/ComplaintDetail";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         {/* Agent */}
         <Route path="/agent" element={<PortalLayout role="agent" />}>
           <Route path="dashboard" element={<AgentDashboard />} />
+          <Route path="complaints/:id" element={<AgentComplaintDetail />} />
         </Route>
       </Routes>
     </BrowserRouter>

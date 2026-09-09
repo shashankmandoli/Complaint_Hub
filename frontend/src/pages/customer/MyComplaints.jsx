@@ -7,13 +7,17 @@ import {
   FaPlusCircle,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { getComplaints } from "../../utils/mockComplaints.js";
+import { getComplaints, STATUS, STATUS_LABELS } from "../../utils/mockComplaints";
 import "./MyComplaints.css";
 
 const statusClass = {
-  Pending: "status pending",
-  "In Progress": "status progress",
-  Resolved: "status resolved",
+  [STATUS.OPEN]: "status pending",
+  [STATUS.ASSIGNED]: "status progress",
+  [STATUS.IN_PROGRESS]: "status progress",
+  [STATUS.RESOLVED]: "status resolved",
+  [STATUS.CLOSED]: "status resolved",
+  [STATUS.REJECTED]: "status pending",
+  [STATUS.NEEDS_REASSIGNMENT]: "status progress",
 };
 
 function MyComplaints() {
@@ -26,9 +30,13 @@ function MyComplaints() {
   }, []);
 
   const total = complaints.length;
-  const pending = complaints.filter((c) => c.status === "Pending").length;
-  const inProgress = complaints.filter((c) => c.status === "In Progress").length;
-  const resolved = complaints.filter((c) => c.status === "Resolved").length;
+  const pending = complaints.filter((c) => c.status === STATUS.OPEN).length;
+  const inProgress = complaints.filter((c) =>
+    [STATUS.ASSIGNED, STATUS.IN_PROGRESS, STATUS.NEEDS_REASSIGNMENT].includes(c.status)
+  ).length;
+  const resolved = complaints.filter((c) =>
+    [STATUS.RESOLVED, STATUS.CLOSED].includes(c.status)
+  ).length;
 
   const stats = [
     { label: "Total", value: total, icon: <FaClipboardList />, tone: "total" },
@@ -75,20 +83,26 @@ function MyComplaints() {
       ) : (
         <div className="complaints-list">
           {complaints.map((c) => (
-            <div className="complaint-card" key={c.id}>
+            <div
+              className="complaint-card"
+              key={c.id}
+              onClick={() => navigate(`/customer/complaints/${c.id}`)}
+              role="button"
+              tabIndex={0}
+            >
               <div className="complaint-main">
                 <h3>{c.title}</h3>
                 <p className="meta">
-                  {c.category} • Raised on {c.createdAt}
+                  {c.category} • Raised on {new Date(c.createdAt).toLocaleDateString()}
                 </p>
               </div>
 
               <div className="complaint-side">
                 <span className={statusClass[c.status] || "status pending"}>
-                  {c.status}
+                  {STATUS_LABELS[c.status] || c.status}
                 </span>
                 <p className="agent-info">
-                  {c.agent ? `Assigned to ${c.agent}` : "Agent not assigned yet"}
+                  {c.assignedAgent ? `Assigned to ${c.assignedAgent}` : "Agent not assigned yet"}
                 </p>
               </div>
             </div>

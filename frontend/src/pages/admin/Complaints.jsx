@@ -1,71 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Complaints.css";
-import ComplaintDetailsModal from "./ComplaintDetailsModal.jsx";
+import ComplaintDetailsModal from "./ComplaintDetailsModal";
+import { getComplaints, STATUS, STATUS_LABELS } from "../../utils/mockComplaints";
 
-const complaintsData = [
-  {
-    id: "#1024",
-    title: "Internet Connectivity Issue",
-    user: "Rahul Sharma",
-    category: "Network",
-    priority: "High",
-    status: "Pending",
-    agent: null,
-  },
-  {
-    id: "#1025",
-    title: "Payment Failure",
-    user: "Priya Singh",
-    category: "Billing",
-    priority: "Medium",
-    status: "In Progress",
-    agent: { name: "Neha Singh", status: "accepted" },
-  },
-  {
-    id: "#1026",
-    title: "Account Login Problem",
-    user: "Amit Verma",
-    category: "Account",
-    priority: "Low",
-    status: "Resolved",
-    agent: { name: "Raj Malhotra", status: "accepted" },
-  },
-];
+const STATUS_CLASS = {
+  [STATUS.OPEN]: "pending",
+  [STATUS.ASSIGNED]: "assigned",
+  [STATUS.IN_PROGRESS]: "in-progress",
+  [STATUS.RESOLVED]: "resolved",
+  [STATUS.CLOSED]: "closed",
+  [STATUS.REJECTED]: "rejected",
+  [STATUS.NEEDS_REASSIGNMENT]: "reassignment",
+};
 
 const Complaints = () => {
   const [search, setSearch] = useState("");
-  const [complaints, setComplaints] = useState(complaintsData);
-  const [selectedComplaint, setSelectedComplaint] = useState(null);
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [priorityFilter, setPriorityFilter] = useState("All");
+  const [complaints, setComplaints] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
 
-  const filteredComplaints = complaints.filter((item) => (
-    item.title.toLowerCase().includes(search.toLowerCase()) ||
-    item.user.toLowerCase().includes(search.toLowerCase())
-  ));
+  const refresh = () => setComplaints(getComplaints());
 
-  const handleReassign = (complaintId, agentName) => {
-    setComplaints((prev) =>
-      prev.map((item) =>
-        item.id === complaintId
-          ? { ...item, agent: { name: agentName, status: "pending" }, status: "In Progress" }
-          : item
-      )
-    );
-  };
+  useEffect(() => {
+    // TODO: replace with a real GET call via services/api.js once the backend is ready.
+    refresh();
+  }, []);
+
+  const filteredComplaints = complaints.filter((item) => {
+    const matchesSearch =
+      item.title.toLowerCase().includes(search.toLowerCase()) ||
+      (item.createdBy || "").toLowerCase().includes(search.toLowerCase());
+    const matchesStatus = statusFilter === "All" || item.status === statusFilter;
+    const matchesPriority = priorityFilter === "All" || item.priority === priorityFilter;
+    return matchesSearch && matchesStatus && matchesPriority;
+  });
+
+  const selectedComplaint = complaints.find((c) => String(c.id) === String(selectedId)) || null;
 
   return (
     <div className="complaints-page">
-
       <div className="page-header">
         <div>
           <h1>Complaint Management</h1>
-          <p>
-            Manage, track and resolve customer complaints
-          </p>
+          <p>Manage, track and resolve customer complaints</p>
         </div>
       </div>
 
       <div className="complaint-card">
-
         <div className="complaint-toolbar">
           <input
             type="text"
@@ -74,15 +56,17 @@ const Complaints = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <select>
-            <option>Status</option>
-            <option>Pending</option>
-            <option>In Progress</option>
-            <option>Resolved</option>
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+            <option value="All">Status</option>
+            {Object.entries(STATUS_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
           </select>
 
-          <select>
-            <option>Priority</option>
+          <select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)}>
+            <option value="All">Priority</option>
             <option>High</option>
             <option>Medium</option>
             <option>Low</option>
@@ -104,47 +88,50 @@ const Complaints = () => {
             </thead>
 
             <tbody>
-              {filteredComplaints.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.id}</td>
-                  <td>{item.title}</td>
-                  <td>{item.user}</td>
-                  <td>{item.category}</td>
-
-                  <td>
-                    <span className={`priority ${item.priority.toLowerCase()}`}>
-                      {item.priority}
-                    </span>
-                  </td>
-
-                  <td>
-                    <span className={`status ${item.status.replace(" ", "-").toLowerCase()}`}>
-                      {item.status}
-                    </span>
-                  </td>
-
-                  <td>
-                    <button
-                      className="view-btn"
-                      onClick={() => setSelectedComplaint(item)}
-                    >
-                      View
-                    </button>
+              {filteredComplaints.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="empty-row">
+                    No complaints match your filters.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filteredComplaints.map((item) => (
+                  <tr key={item.id}>
+                    <td>#{item.id}</td>
+                    <td>{item.title}</td>
+                    <td>{item.createdBy}</td>
+                    <td>{item.category}</td>
+
+                    <td>
+                      <span className={`priority ${item.priority.toLowerCase()}`}>
+                        {item.priority}
+                      </span>
+                    </td>
+
+                    <td>
+                      <span className={`status ${STATUS_CLASS[item.status]}`}>
+                        {STATUS_LABELS[item.status]}
+                      </span>
+                    </td>
+
+                    <td>
+                      <button className="view-btn" onClick={() => setSelectedId(item.id)}>
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
-
       </div>
 
       <ComplaintDetailsModal
-        complaint={selectedComplaint}
-        onClose={() => setSelectedComplaint(null)}
-        onReassign={handleReassign}
+        complaintId={selectedComplaint ? selectedComplaint.id : null}
+        onClose={() => setSelectedId(null)}
+        onChanged={refresh}
       />
-
     </div>
   );
 };

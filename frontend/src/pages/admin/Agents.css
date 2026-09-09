@@ -133,3 +133,9 @@ tbody tr:hover {
     font-size: 24px;
   }
 }
+/* Action column: center the header label and the button under it so the
+   button doesn't hug one edge of a wider auto-sized column. */
+th:last-child,
+td:last-child {
+  text-align: center;
+}
