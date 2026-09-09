@@ -11,4 +11,10 @@ public interface UserProfilePhotoService {
     List<UserProfilePhoto> getAllProfilePhotos();
     UserProfilePhoto updateProfilePhoto(UserProfilePhoto profilePhoto);
     boolean deleteProfilePhoto(long id);
+    UserProfilePhoto uploadProfilePhoto(
+            long userId,
+            byte[] fileData,
+            String fileName,
+            String contentType
+    );
 }

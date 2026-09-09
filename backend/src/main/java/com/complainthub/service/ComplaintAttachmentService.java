@@ -9,6 +9,11 @@ public interface ComplaintAttachmentService {
     ComplaintAttachment getAttachmentById(long id);
     List<ComplaintAttachment> getAllAttachments();
     List<ComplaintAttachment> getAttachmentsByComplaint(long complaintId);
-    boolean deleteAttachment(long id);
-    void cleanupAttachments(long complaintId);
+    boolean deleteAttachment(long id);void cleanupAttachments(long complaintId);
+    ComplaintAttachment uploadAttachment(
+            long complaintId,
+            byte[] fileData,
+            String fileName,
+            String contentType
+    );
 }
