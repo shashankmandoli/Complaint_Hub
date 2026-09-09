@@ -37,6 +37,8 @@ public class HibernateUtil {
             config.addAnnotatedClass(Complaint.class);
             config.addAnnotatedClass(ComplaintAssignment.class);
             config.addAnnotatedClass(ComplaintUpdate.class);
+            config.addAnnotatedClass(UserProfilePhoto.class);
+            config.addAnnotatedClass(ComplaintAttachment.class);
 
             config.setProperty(
                     "hibernate.connection.url",
