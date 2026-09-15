@@ -56,3 +56,6 @@ backend/src/main/resources/database.properties
 
 # User-uploaded files
 uploads/
+
+# bug-fix notes
+notes.md
