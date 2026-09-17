@@ -8,7 +8,6 @@ import com.complainthub.service.ComplaintAssignmentService;
 import com.complainthub.service.ComplaintAssignmentServiceImpl;
 import com.complainthub.util.AuthenticationConstants;
 import com.complainthub.util.AuthorizationUtil;
-import com.complainthub.util.ValidationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
