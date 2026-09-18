@@ -33,6 +33,9 @@ public class Complaint {
     @Enumerated(EnumType.STRING)
     private ComplaintPriority priority;
 
+    @Column(nullable = false)
+    private boolean wasResolved = false;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -110,6 +113,14 @@ public class Complaint {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public boolean isWasResolved() {
+        return wasResolved;
+    }
+
+    public void setWasResolved(boolean wasResolved) {
+        this.wasResolved = wasResolved;
     }
 
     public LocalDateTime getCreatedAt() {
