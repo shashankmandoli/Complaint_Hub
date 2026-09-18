@@ -17,5 +17,5 @@ public interface ComplaintService {
     Complaint updateComplaint(Complaint complaint);
     Complaint updateStatus(long complaintId, ComplaintStatus status);
     Complaint updatePriority(long complaintId, ComplaintPriority priority);
-
+    Complaint reopenComplaint(long complaintId, long userId);
 }
