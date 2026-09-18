@@ -168,27 +168,23 @@ public class ComplaintServiceImpl implements ComplaintService {
     @Override
     public Complaint updateStatus(
             long complaintId,
-            ComplaintStatus status) {
-
-        ValidationUtil.validateId(
-                complaintId,
-                "Complaint Id"
-        );
-
+            ComplaintStatus status
+    ) {
         if (status == null) {
-            throw new IllegalArgumentException(
-                    "Complaint Status is required."
-            );
+            throw new IllegalArgumentException("Status is required.");
         }
 
-        Complaint complaint =
-                complaintDao.updateStatus(complaintId, status);
-
+        Complaint complaint = complaintDao.findById(complaintId);
         if (complaint == null) {
-            return null;
+            throw new IllegalArgumentException("Complaint not found.");
         }
 
-        return complaint;
+        complaint.setStatus(status);
+        if (status == ComplaintStatus.RESOLVED) {
+            complaint.setWasResolved(true);
+        }
+
+        return complaintDao.update(complaint);
     }
 
     @Override
@@ -220,6 +216,34 @@ public class ComplaintServiceImpl implements ComplaintService {
         return complaint;
     }
 
+    @Override
+    public Complaint reopenComplaint(
+            long complaintId,
+            long userId
+    ) {
+        Complaint complaint = complaintDao.findById(complaintId);
+
+        if (complaint == null) {
+            throw new IllegalArgumentException("Complaint not found.");
+        }
+
+        if (complaint.getUser() == null) {
+            throw new IllegalArgumentException("Complaint owner is missing.");
+        }
+
+        if (complaint.getUser().getId() != userId) {
+            throw new IllegalArgumentException("Only the complaint owner can reopen the complaint.");
+        }
+
+        if (complaint.getStatus() != ComplaintStatus.RESOLVED) {
+            throw new IllegalArgumentException("Only a resolved complaint can be reopened.");
+        }
+
+        complaint.setStatus(ComplaintStatus.OPEN);
+        complaint.setWasResolved(true);
+
+        return complaintDao.update(complaint);
+    }
 
     // -------- Validate Method --------
     private void validateComplaint(Complaint complaint) {
