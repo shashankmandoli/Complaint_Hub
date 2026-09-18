@@ -177,6 +177,70 @@ public class ComplaintController extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doPut(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws ServletException, IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+
+        try {
+            Long authenticatedUserId = getAuthenticatedUserId(request);
+            String pathInfo = request.getPathInfo();
+
+            if (pathInfo == null || pathInfo.equals("/")) {
+                throw new IllegalArgumentException("Complaint ID is required.");
+            }
+
+            String[] pathParts = pathInfo.split("/");
+            if (pathParts.length != 3
+                    || !pathParts[2].equalsIgnoreCase("reopen")) {
+                throw new IllegalArgumentException("Invalid complaint reopen URL.");
+            }
+
+            long complaintId = parseId(pathParts[1], "Complaint ID");
+
+            Complaint reopenedComplaint =
+                    complaintService.reopenComplaint(
+                            complaintId,
+                            authenticatedUserId
+                    );
+
+            response.setStatus(
+                    HttpServletResponse.SC_OK
+            );
+            response.getWriter().println(
+                    "Complaint reopened successfully."
+            );
+            response.getWriter().println(
+                    "Complaint ID: "
+                            + reopenedComplaint.getId()
+            );
+            response.getWriter().println(
+                    "Status: "
+                            + reopenedComplaint.getStatus()
+            );
+            response.getWriter().println(
+                    "Was Resolved: "
+                            + reopenedComplaint.isWasResolved()
+            );
+
+        } catch (IllegalArgumentException exception) {
+            response.setStatus(
+                    HttpServletResponse.SC_BAD_REQUEST
+            );
+            response.getWriter().println(
+                    "Validation Error: "
+                            + exception.getMessage()
+            );
+
+        } catch (Exception exception) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().println("Unable to reopen complaint.");
+        }
+    }
+
     private void getMyComplaints(
             HttpServletRequest request,
             HttpServletResponse response
