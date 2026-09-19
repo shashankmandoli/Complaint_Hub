@@ -23,7 +23,7 @@ public class ValidationUtil {
 
     public static void validateEmail(String email){
         validateRequired(email, "Email");
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[]A-Za-z0-9.-]+$";
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
 
         if(!email.matches(emailRegex))
             throw new IllegalArgumentException("Email format is invalid!");

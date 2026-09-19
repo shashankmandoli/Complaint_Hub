@@ -38,7 +38,9 @@ public class AuthenticationFilter implements Filter {
     }
 
     private boolean isPublicEndpoint(String requestUri){
-        return requestUri.endsWith("/api/auth/login") || requestUri.endsWith(("api/auth/logout"));
+        return requestUri.endsWith("/api/auth/login")
+                || requestUri.endsWith("/api/auth/logout")
+                || requestUri.endsWith("/api/auth/register");
     }
 
     private void sendUnauthorizedResponse(HttpServletResponse res) throws IOException{
