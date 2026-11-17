@@ -322,7 +322,7 @@ The exact property names and configuration files should be confirmed from the cu
 | **Shashank Mandoli** | Backend Development |
 | **Tanu Mittal** | Frontend Development |
 
-**Project Repository:** [Complaint Portal – GitHub](https://github.com/Tanu-Mittal/Complaint_Portal)
+**Frontend Repository:** [Complaint Portal – GitHub](https://github.com/Tanu-Mittal/Complaint_Portal)
 
 ## Future Enhancements
 
