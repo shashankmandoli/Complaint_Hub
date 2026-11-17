@@ -317,11 +317,12 @@ The exact property names and configuration files should be confirmed from the cu
 
 ## Contributors
 
-| Contributor | Contribution |
+| Contributor | Role & Contribution |
 |---|---|
-| **Shashank Mandoli** | Backend Development |
-| **Tanu Mittal** | Frontend Development |
+| **Shashank Mandoli** | Backend Developer – Backend architecture, database design, Java Servlet and Hibernate implementation, REST API development, authentication, authorization, business logic, and frontend-backend integration. |
+| **Tanu Mittal** | Frontend Developer – React frontend development, UI/UX design, component development, and frontend implementation. |
 
+**Project Repository:** [Complaint Portal – GitHub](https://github.com/Tanu-Mittal/Complaint_Portal)
 **Frontend Repository:** [Complaint Portal – GitHub](https://github.com/Tanu-Mittal/Complaint_Portal)
 
 ## Future Enhancements
